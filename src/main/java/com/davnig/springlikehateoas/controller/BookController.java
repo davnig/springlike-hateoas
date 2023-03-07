@@ -19,7 +19,7 @@ public class BookController {
     public ResponseEntity<Book> greeting() {
         Book book = new Book(1, "Harry Potter")
                 .add(Link.of("http://localhost:8080/greetings/1"))
-                .add(Link.to(methodOn(BookController.class)));
+                .add(Link.to(methodOn(BookController.class).greeting()));
         return ResponseEntity.ok(book);
     }
 

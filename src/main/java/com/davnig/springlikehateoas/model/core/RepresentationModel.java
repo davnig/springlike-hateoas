@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A container for a collection of {@link Link}s
+ *
+ * @param <T>
+ */
 public class RepresentationModel<T extends RepresentationModel<? extends T>> {
 
     private List<Link> links;

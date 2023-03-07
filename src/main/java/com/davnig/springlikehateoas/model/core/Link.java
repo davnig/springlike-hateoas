@@ -1,5 +1,7 @@
 package com.davnig.springlikehateoas.model.core;
 
+import com.davnig.springlikehateoas.core.MethodInvocationRecording;
+import com.davnig.springlikehateoas.utils.DummyInvocationUtils;
 import lombok.Getter;
 import org.springframework.util.Assert;
 
@@ -26,6 +28,9 @@ public class Link {
     }
 
     public static Link to(Object dummyInvocation) {
+        MethodInvocationRecording methodInvocationRecording =
+                DummyInvocationUtils.getRecordingFromDummyInvocation(dummyInvocation);
+        Class<?> targetType = methodInvocationRecording.getTargetType();
         return new Link("", "");
     }
 
