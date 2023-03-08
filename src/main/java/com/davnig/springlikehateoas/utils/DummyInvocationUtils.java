@@ -2,7 +2,6 @@ package com.davnig.springlikehateoas.utils;
 
 import com.davnig.springlikehateoas.core.DefaultMethodInvocationRecording;
 import com.davnig.springlikehateoas.core.MethodInvocationRecording;
-import lombok.Getter;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.Advised;
@@ -13,10 +12,9 @@ import java.lang.reflect.Method;
 
 public class DummyInvocationUtils {
 
-    @Getter
     public static class InvocationRecorderMethodInterceptor implements MethodInterceptor {
 
-        private Class<?> type;
+        private final Class<?> type;
         private MethodInvocationRecording invocationRecording;
 
         public InvocationRecorderMethodInterceptor(Class<?> type) {
@@ -28,8 +26,13 @@ public class DummyInvocationUtils {
             Method method = invocation.getMethod();
             invocationRecording = new DefaultMethodInvocationRecording(type, method, invocation.getArguments());
             Class<?> returnType = method.getReturnType();
-            return getProxyWithInterceptor(returnType);
+            return returnType.cast(getProxyWithInterceptor(returnType, this));
         }
+
+        public MethodInvocationRecording getInvocationRecording() {
+            return invocationRecording;
+        }
+
     }
 
     /**
@@ -41,7 +44,7 @@ public class DummyInvocationUtils {
      */
     public static <T> T methodOn(Class<T> type) {
         Assert.notNull(type, "the given type must not be null");
-        return getProxyWithInterceptor(type);
+        return getProxyWithInterceptor(type, new InvocationRecorderMethodInterceptor(type));
     }
 
     public static MethodInvocationRecording getRecordingFromDummyInvocation(Object dummyInvocation) {
@@ -51,13 +54,12 @@ public class DummyInvocationUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T getProxyWithInterceptor(Class<?> type) {
-        InvocationRecorderMethodInterceptor methodInvocationRecorder = new InvocationRecorderMethodInterceptor(type);
-        ProxyFactory factory = new ProxyFactory();
-        factory.addAdvice(methodInvocationRecorder);
-        factory.setTargetClass(type);
-        factory.setProxyTargetClass(true);
-        return (T) factory.getProxy(type.getClassLoader());
+    private static <T> T getProxyWithInterceptor(Class<?> type, InvocationRecorderMethodInterceptor interceptor) {
+        ProxyFactory proxyFactory = new ProxyFactory();
+        proxyFactory.setTargetClass(type);
+        proxyFactory.setProxyTargetClass(true);
+        proxyFactory.addAdvice(interceptor);
+        return (T) proxyFactory.getProxy();
     }
 
 }
