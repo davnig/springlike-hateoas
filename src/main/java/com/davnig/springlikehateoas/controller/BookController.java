@@ -15,7 +15,7 @@ import static com.davnig.springlikehateoas.utils.DummyInvocationUtils.methodOn;
 @RequestMapping("/greetings")
 public class BookController {
 
-    @GetMapping
+    @GetMapping("/1")
     public ResponseEntity<Book> greeting() {
         Book book = new Book(1, "Harry Potter")
                 .add(Link.of("http://localhost:8080/greetings/1"))
