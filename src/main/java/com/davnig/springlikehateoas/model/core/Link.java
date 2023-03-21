@@ -1,15 +1,13 @@
 package com.davnig.springlikehateoas.model.core;
 
 import com.davnig.springlikehateoas.core.MethodInvocationRecording;
+import com.davnig.springlikehateoas.utils.AnnotationUtils;
 import com.davnig.springlikehateoas.utils.DummyInvocationUtils;
 import lombok.Getter;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.lang.reflect.Method;
-
-import static com.davnig.springlikehateoas.utils.AnnotationUtils.getMappingFrom;
-import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 
 @Getter
 public class Link {
@@ -36,11 +34,11 @@ public class Link {
     public static Link to(Object dummyInvocation) {
         MethodInvocationRecording methodInvocationRecording =
                 DummyInvocationUtils.getRecordingFromDummyInvocation(dummyInvocation);
-        Class<?> targetType = methodInvocationRecording.getTargetType();
-        Method targetMethod = methodInvocationRecording.getTargetMethod();
-        String methodLevelMapping = getMappingFrom(findMergedAnnotation(targetMethod, RequestMapping.class))[0];
-        String controllerLevelMapping = getMappingFrom(findMergedAnnotation(targetType, RequestMapping.class))[0];
-        return new Link(controllerLevelMapping + methodLevelMapping, "");
+        Class<?> controller = methodInvocationRecording.getTargetType();
+        Method method = methodInvocationRecording.getTargetMethod();
+        String host = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        String path = AnnotationUtils.getControllerMethodPath(controller, method);
+        return new Link(host + path, "");
     }
 
 
