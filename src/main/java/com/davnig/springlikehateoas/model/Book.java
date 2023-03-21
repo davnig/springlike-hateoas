@@ -1,6 +1,6 @@
 package com.davnig.springlikehateoas.model;
 
-import com.davnig.springlikehateoas.model.core.RepresentationModel;
+import com.davnig.springlikehateoas.core.RepresentationModel;
 import lombok.Getter;
 import lombok.Setter;
 

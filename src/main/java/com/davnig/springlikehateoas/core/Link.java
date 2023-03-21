@@ -1,6 +1,5 @@
-package com.davnig.springlikehateoas.model.core;
+package com.davnig.springlikehateoas.core;
 
-import com.davnig.springlikehateoas.core.MethodInvocationRecording;
 import com.davnig.springlikehateoas.utils.AnnotationUtils;
 import com.davnig.springlikehateoas.utils.DummyInvocationUtils;
 import lombok.Getter;

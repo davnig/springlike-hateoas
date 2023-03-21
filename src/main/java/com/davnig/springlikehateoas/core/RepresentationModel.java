@@ -1,4 +1,4 @@
-package com.davnig.springlikehateoas.model.core;
+package com.davnig.springlikehateoas.core;
 
 import org.springframework.util.Assert;
 

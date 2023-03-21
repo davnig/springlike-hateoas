@@ -1,8 +1,8 @@
 package com.davnig.springlikehateoas.controller;
 
 
+import com.davnig.springlikehateoas.core.Link;
 import com.davnig.springlikehateoas.model.Book;
-import com.davnig.springlikehateoas.model.core.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
